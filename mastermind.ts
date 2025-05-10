@@ -8,9 +8,13 @@ let numberOfCorrect: number = 0
 let numberOfFalse: number = 0
 let numberOfInCombination: number = 0
 let solvedOrLost: boolean = false
-// create solution
 let colors: Array<string> = ["blue", "white", "red", "black", "orange", "green", "yellow", "grey"]
+console.log("The allowed colors are: " + colors)
+
+// create solution
+
 let solution: Array<string> = []
+let completelyCorrect: Array<string> = []
 for (let i = 0; i < 4; i++) {
   let randomNumber: number = Math.floor(Math.random() * 8)
   solution.push(colors[randomNumber])
@@ -20,30 +24,56 @@ console.log(solution)
 // while not solved:
 
 // get input(guess) from user
-rl.question('Guess the solution, e.g. "blue,white,red,orange":\n', (answer) => {
+rl.question('Guess the solution, e.g. "red,white,red,orange":\n', (answer) => {
   currentGuess = answer.split(",")
+
+  // stop if invalid answer
+
+  if (currentGuess.every(color => colors.includes(color)) !== true) {
+    console.log("Invalid Answer!")
+    rl.close()
+    return
+  }
   console.log(currentGuess)
+
   // compare guess and solution
+
   for (let i = 0; i !== 4; i++) {
+
+    // checking for completely correct colors
+
     if (currentGuess[i] == solution[i]) {
       numberOfCorrect += 1
-    } for (let a = 0; a !== 4; a++) {
-      if (currentGuess[i] !== solution[0 || 1 || 2 || 3]) {
-        numberOfFalse += 0.25
-      }
+      completelyCorrect.push(currentGuess[i])
     }
 
+    // checking for false colors
+
+    else if (solution.includes(currentGuess[i]) !== true) {
+      numberOfFalse += 1
+    }
   }
-  for (let i = 0, a = 0, b = 0; a !== 16; i++, a++) {
-    for (let a = 0; a !== 4; a++) {
-      if (currentGuess[i] == solution[a]) {
+
+  // checking for colors in the wrong position
+
+  for (let i = 0; i !== 4; i++) {
+    let hasMatched = false
+    for (let a = 0; a !== 4; a++)
+      if (currentGuess[i] == solution[a] && completelyCorrect[i] !== solution[a] && hasMatched == false) {
         numberOfInCombination += 1
+        hasMatched = true
       }
-    }
-
+    hasMatched = false
   }
+
   // give feedback
-  console.log("Your Guess had " + (numberOfCorrect<1 ? "no" : numberOfCorrect) + " completely correct color(s), " + numberOfFalse + " false color(s), and " + numberOfInCombination + " color(s) that were correct but in the wrong place")
+
+  if (numberOfCorrect < 4) {
+    console.log("Your Guess had " + (numberOfCorrect < 1 ? "no" : numberOfCorrect) + " completely correct color(s), " + (numberOfFalse < 1 ? "no" : numberOfFalse) + " false color(s), and " + (numberOfInCombination < 1 ? "no" : numberOfInCombination) + " color(s) that were correct but in the wrong place")
+  } else if (numberOfCorrect == 4) {
+    console.log("Congratulations,\nyou have won the game")
+    solvedOrLost = true
+  }
   rl.close();
 })
 
