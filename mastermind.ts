@@ -58,11 +58,12 @@ rl.question('Guess the solution, e.g. "red,white,red,orange":\n', (answer) => {
 
   for (let i = 0; i !== 4; i++) {
     let hasMatched = false
-    for (let a = 0; a !== 4; a++)
+    for (let a = 0; a !== 4; a++) {
       if (currentGuess[i] == solution[a] && completelyCorrect[i] !== solution[a] && hasMatched == false) {
         numberOfInCombination += 1
         hasMatched = true
       }
+    }
     hasMatched = false
   }
 
