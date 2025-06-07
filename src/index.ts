@@ -10,27 +10,27 @@ let numberOfInCombination: number = 0
 let solvedOrLost: boolean = false
 let numberOfTries: number = 0
 let loopRunning = false;
+let completelyCorrect: Array<string> = []
 let colors: Array<string> = ["blue", "white", "red", "black", "orange", "green", "yellow", "grey"]
 console.log("The allowed colors are: " + colors)
 if (numberOfTries > 11) {
   solvedOrLost = true
 }
 
-
-// create solution
-
-let solution: Array<string> = []
-let completelyCorrect: Array<string> = []
-for (let i = 0; i < 4; i++) {
-  let randomNumber: number = Math.floor(Math.random() * 8)
-  solution.push(colors[randomNumber])
+export function createSolution(): Array<string> {
+  let solution: Array<string> = []
+  for (let i = 0; i < 4; i++) {
+    let randomNumber: number = Math.floor(Math.random() * 8)
+    solution.push(colors[randomNumber])
+  }
+  console.log(solution)
+  return solution
 }
-console.log(solution)
-
+let solution = createSolution()
 
 // while not solved:
 loopRunning = true
-if (loopRunning == true && solvedOrLost ==  false) {
+if (loopRunning == true && solvedOrLost == false) {
   loop()
   loopRunning = false
 }

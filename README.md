@@ -18,3 +18,9 @@ npm install (to install packages defined in package.json)
 ## Execution
 
 run mastermind via: npm run start:dev
+
+## Setup testing
+
+npm install --save-dev @babel/preset-typescript
+npm install --save-dev @babel/preset-env
+create babel.config.js
