@@ -1,36 +1,20 @@
-# mastermind-ts
-# launch.jason:
-# {
-#     // Use IntelliSense to learn about possible attributes.
-#     // Hover to view descriptions of existing attributes.
-#    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-#    "version": "0.2.0",
-#    "configurations": [
-#        {
-#            "type": "node",
-#            "request": "launch",
-#            "name": "Launch Program",
-#            "skipFiles": [
-#                "<node_internals>/**"
-#            ],
-#            "program": "${workspaceFolder}\\mastermind.ts",
-#            "preLaunchTask": "tsc: build - tsconfig.json",
-#            "outFiles": [
-#                "${workspaceFolder}/out/**/*.js"
-#            ]
-#        }, {
-#            "type": "node",
-#            "request": "launch",
-#            "name": "Launch with npx",
-#            "runtimeExecutable": "npx",
-#            "runtimeArgs": [
-#                "ts-node",
-#                ".\\mastermind.ts"
-#            ],
-#            "console": "integratedTerminal"
-#        }
-#    ]
-# }
+# Mastermind in typescript
 
+## Setup
 
-# command for launching file using npx: npx --node-ts ./mastermind.ts
+### Install node using nvm
+
+nvm ls-remote
+nvm install v24.1.0
+nvm use v24.1.0
+node --version
+
+### Setup project files
+
+create tsconfig.json:  npx tsc --init --rootDir src --outDir build --esModuleInterop --resolveJsonModule --lib es6 --module commonjs --allowJs true --noImplicitAny true
+create package.json including dependencies (see source code)
+npm install (to install packages defined in package.json)
+
+## Execution
+
+run mastermind via: npm run start:dev
