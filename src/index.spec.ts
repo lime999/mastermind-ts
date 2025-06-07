@@ -1,3 +1,5 @@
+import { createSolution } from "./index"
+
 test("Initial test", () => {
-   expect(2).toEqual(3);
+    expect(createSolution().length).toEqual(4);
 });
