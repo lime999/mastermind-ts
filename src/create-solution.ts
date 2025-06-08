@@ -1,4 +1,5 @@
 import { pinColors } from './pin'
+
 export function createSolution(): Array<string> {
   let solution: Array<string> = []
   for (let i = 0; i < 4; i++) {
