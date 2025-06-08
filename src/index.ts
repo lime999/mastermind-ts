@@ -1,4 +1,6 @@
 import * as readline from 'readline'
+import { createSolution } from './create-solution';
+import { pinColors } from './pin';
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -11,21 +13,12 @@ let solvedOrLost: boolean = false
 let numberOfTries: number = 0
 let loopRunning = false;
 let completelyCorrect: Array<string> = []
-let colors: Array<string> = ["blue", "white", "red", "black", "orange", "green", "yellow", "grey"]
-console.log("The allowed colors are: " + colors)
+console.log("The allowed colors are: " + pinColors)
 if (numberOfTries > 11) {
   solvedOrLost = true
 }
 
-export function createSolution(): Array<string> {
-  let solution: Array<string> = []
-  for (let i = 0; i < 4; i++) {
-    let randomNumber: number = Math.floor(Math.random() * 8)
-    solution.push(colors[randomNumber])
-  }
-  console.log(solution)
-  return solution
-}
+
 let solution = createSolution()
 
 // while not solved:
@@ -44,7 +37,7 @@ function loop() {
 
     // stop if invalid answer
 
-    if (currentGuess.every(color => colors.includes(color)) !== true) {
+    if (currentGuess.every(color => pinColors.includes(color)) !== true) {
       console.log("Invalid Answer!")
       rl.close()
       return
