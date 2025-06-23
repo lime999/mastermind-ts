@@ -34,6 +34,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const readline = __importStar(require("readline"));
+const create_solution_1 = require("./create-solution");
+const pin_1 = require("./pin");
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -45,72 +47,60 @@ let numberOfInCombination = 0;
 let solvedOrLost = false;
 let numberOfTries = 0;
 let loopRunning = false;
-let colors = ["blue", "white", "red", "black", "orange", "green", "yellow", "grey"];
-console.log("The allowed colors are: " + colors);
+let completelyCorrect = [];
+console.log("The allowed colors are: " + pin_1.pinColors);
 if (numberOfTries > 11) {
     solvedOrLost = true;
 }
-// create solution
-let solution = [];
-let completelyCorrect = [];
-for (let i = 0; i < 4; i++) {
-    let randomNumber = Math.floor(Math.random() * 8);
-    solution.push(colors[randomNumber]);
-}
-console.log(solution);
+let solution = (0, create_solution_1.createSolution)();
 // while not solved:
-loopRunning = true;
-if (loopRunning == true && solvedOrLost == false) {
-    loop();
-    loopRunning = false;
+// get input(guess) from user
+rl.question('Guess the solution, e.g. "red,white,red,orange":\n', (answer) => {
+    currentGuess = answer.split(",");
+    // stop if invalid answer
+    if (currentGuess.every(color => pin_1.pinColors.includes(color)) !== true) {
+        console.log("Invalid Answer!");
+        rl.close();
+        return;
+    }
+    console.log(currentGuess);
+    // compare guess and solution
+    checkSolution();
+    // checking for colors in the wrong position
+    for (let i = 0; i !== 4; i++) {
+        let hasMatched = false;
+        for (let a = 0; a !== 4; a++) {
+            if (currentGuess[i] == solution[a] && completelyCorrect[i] !== solution[a] && hasMatched == false) {
+                numberOfInCombination += 1;
+                hasMatched = true;
+            }
+        }
+        hasMatched = false;
+    }
+    // give feedback
+    // if solved stop 
+    if (numberOfCorrect < 4) {
+        console.log("Your Guess had " + (numberOfCorrect < 1 ? "no" : numberOfCorrect) + " completely correct color(s), " + (numberOfFalse < 1 ? "no" : numberOfFalse) + " false color(s), and " + (numberOfInCombination < 1 ? "no" : numberOfInCombination) + " color(s) that were correct but in the wrong place");
+        numberOfTries++;
+        loopRunning = true;
+    }
+    else if (numberOfCorrect == 4) {
+        console.log("Congratulations,\nyou have won the game!");
+        solvedOrLost = true;
+        rl.close();
+    }
+});
+function checkSolution() {
+    for (let i = 0; i !== 4; i++) {
+        // checking for completely correct colors
+        if (currentGuess[i] == solution[i]) {
+            numberOfCorrect += 1;
+            completelyCorrect.push(currentGuess[i]);
+        }
+        // checking for false colors
+        else if (solution.includes(currentGuess[i]) !== true) {
+            numberOfFalse += 1;
+        }
+    }
 }
-function loop() {
-    loopRunning = false;
-    // get input(guess) from user
-    rl.question('Guess the solution, e.g. "red,white,red,orange":\n', (answer) => {
-        currentGuess = answer.split(",");
-        // stop if invalid answer
-        if (currentGuess.every(color => colors.includes(color)) !== true) {
-            console.log("Invalid Answer!");
-            rl.close();
-            return;
-        }
-        console.log(currentGuess);
-        // compare guess and solution
-        for (let i = 0; i !== 4; i++) {
-            // checking for completely correct colors
-            if (currentGuess[i] == solution[i]) {
-                numberOfCorrect += 1;
-                completelyCorrect.push(currentGuess[i]);
-            }
-            // checking for false colors
-            else if (solution.includes(currentGuess[i]) !== true) {
-                numberOfFalse += 1;
-            }
-        }
-        // checking for colors in the wrong position
-        for (let i = 0; i !== 4; i++) {
-            let hasMatched = false;
-            for (let a = 0; a !== 4; a++) {
-                if (currentGuess[i] == solution[a] && completelyCorrect[i] !== solution[a] && hasMatched == false) {
-                    numberOfInCombination += 1;
-                    hasMatched = true;
-                }
-            }
-            hasMatched = false;
-        }
-        // give feedback
-        // if solved stop 
-        if (numberOfCorrect < 4) {
-            console.log("Your Guess had " + (numberOfCorrect < 1 ? "no" : numberOfCorrect) + " completely correct color(s), " + (numberOfFalse < 1 ? "no" : numberOfFalse) + " false color(s), and " + (numberOfInCombination < 1 ? "no" : numberOfInCombination) + " color(s) that were correct but in the wrong place");
-            numberOfTries + 1;
-            loopRunning = true;
-        }
-        else if (numberOfCorrect == 4) {
-            console.log("Congratulations,\nyou have won the game!");
-            solvedOrLost = true;
-            rl.close();
-        }
-    });
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFzdGVybWluZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9tYXN0ZXJtaW5kLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsbURBQW9DO0FBQ3BDLE1BQU0sRUFBRSxHQUFHLFFBQVEsQ0FBQyxlQUFlLENBQUM7SUFDbEMsS0FBSyxFQUFFLE9BQU8sQ0FBQyxLQUFLO0lBQ3BCLE1BQU0sRUFBRSxPQUFPLENBQUMsTUFBTTtDQUN2QixDQUFDLENBQUM7QUFDSCxJQUFJLFlBQTJCLENBQUE7QUFDL0IsSUFBSSxlQUFlLEdBQVcsQ0FBQyxDQUFBO0FBQy9CLElBQUksYUFBYSxHQUFXLENBQUMsQ0FBQTtBQUM3QixJQUFJLHFCQUFxQixHQUFXLENBQUMsQ0FBQTtBQUNyQyxJQUFJLFlBQVksR0FBWSxLQUFLLENBQUE7QUFDakMsSUFBSSxhQUFhLEdBQVcsQ0FBQyxDQUFBO0FBQzdCLElBQUksV0FBVyxHQUFHLEtBQUssQ0FBQztBQUN4QixJQUFJLE1BQU0sR0FBa0IsQ0FBQyxNQUFNLEVBQUUsT0FBTyxFQUFFLEtBQUssRUFBRSxPQUFPLEVBQUUsUUFBUSxFQUFFLE9BQU8sRUFBRSxRQUFRLEVBQUUsTUFBTSxDQUFDLENBQUE7QUFDbEcsT0FBTyxDQUFDLEdBQUcsQ0FBQywwQkFBMEIsR0FBRyxNQUFNLENBQUMsQ0FBQTtBQUNoRCxJQUFJLGFBQWEsR0FBRyxFQUFFLEVBQUUsQ0FBQztJQUN2QixZQUFZLEdBQUcsSUFBSSxDQUFBO0FBQ3JCLENBQUM7QUFHRCxrQkFBa0I7QUFFbEIsSUFBSSxRQUFRLEdBQWtCLEVBQUUsQ0FBQTtBQUNoQyxJQUFJLGlCQUFpQixHQUFrQixFQUFFLENBQUE7QUFDekMsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEVBQUUsRUFBRSxDQUFDO0lBQzNCLElBQUksWUFBWSxHQUFXLElB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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxtREFBb0M7QUFDcEMsdURBQW1EO0FBQ25ELCtCQUFrQztBQUNsQyxNQUFNLEVBQUUsR0FBRyxRQUFRLENBQUMsZUFBZSxDQUFDO0lBQ2xDLEtBQUssRUFBRSxPQUFPLENBQUMsS0FBSztJQUNwQixNQUFNLEVBQUUsT0FBTyxDQUFDLE1BQU07Q0FDdkIsQ0FBQyxDQUFDO0FBQ0gsSUFBSSxZQUEyQixDQUFBO0FBQy9CLElBQUksZUFBZSxHQUFXLENBQUMsQ0FBQTtBQUMvQixJQUFJLGFBQWEsR0FBVyxDQUFDLENBQUE7QUFDN0IsSUFBSSxxQkFBcUIsR0FBVyxDQUFDLENBQUE7QUFDckMsSUFBSSxZQUFZLEdBQVksS0FBSyxDQUFBO0FBQ2pDLElBQUksYUFBYSxHQUFXLENBQUMsQ0FBQTtBQUM3QixJQUFJLFdBQVcsR0FBRyxLQUFLLENBQUM7QUFDeEIsSUFBSSxpQkFBaUIsR0FBa0IsRUFBRSxDQUFBO0FBQ3pDLE9BQU8sQ0FBQyxHQUFHLENBQUMsMEJBQTBCLEdBQUcsZUFBUyxDQUFDLENBQUE7QUFDbkQsSUFBSSxhQUFhLEdBQUcsRUFBRSxFQUFFLENBQUM7SUFDdkIsWUFBWSxHQUFHLElBQUksQ0FBQTtBQUNyQixDQUFDO0FBRUQsSUFBSSxRQUFRLEdBQUcsSUFBQSxnQ0FBYyxHQUFFLENBQUE7QUFFL0Isb0JBQW9CO0FBRXBCLDZCQUE2QjtBQUU3QixFQUFFLENBQUMsUUFBUSxDQUFDLG9EQUFvRCxFQUFFLENBQUMsTUFBTSxFQUFFLEVBQUU7SUFDM0UsWUFBWSxHQUFHLE1BQU0sQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUE7SUFFaEMseUJBQXlCO0lBRXpCLElBQUksWUFBWSxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUMsRUFBRSxDQUFD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
