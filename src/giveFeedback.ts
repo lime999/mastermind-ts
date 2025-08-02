@@ -1,7 +1,6 @@
 import { resetGameState } from "./resetGameState"
-let gameState = resetGameState()
 
-export function giveFeedback() {
+export function giveFeedback(gameState = resetGameState()) {
     if (gameState.numberOfCorrect < 4) {
       console.log(
         "Your Guess had " +

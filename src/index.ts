@@ -10,7 +10,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-let solution = ["white", "yellow", "yellow", "yellow"]
+let solution = createSolution()
 let gameState = resetGameState()
 
 console.log("The allowed colors are:")
@@ -21,6 +21,8 @@ for (let i = 0; i < pinColors.length; i++) {
 if (gameState.numberOfTries > 11) {
   gameState.solvedOrLost = true
 }
+
+// prompt user for guess
 
 rl.question('Guess the solution, e.g. "red,white,red,orange"\n(duplicate colors are alowed):\n', (answer) => {
   let currentGuess: Array<string> = answer.split(",")

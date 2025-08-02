@@ -6,15 +6,16 @@ export function compareGuessAndSolution(currentGuess: string[], solution: string
     for (let i = 0; i !== 4; i++) {
 
         // checking for completely correct colors
+
         if (currentGuess[i] == solution[i]) {
             gameState.numberOfCorrect++;
-            gameState.positionOfCompletelyCorrect[i] = currentGuess[i];
+            gameState.positionOfCompletelyCorrect[i] = true;
         }
 
 
-
         // checking for false colors
-        else if (solution.includes(currentGuess[i]) !== true) {
+
+        else if (solution.includes(currentGuess[i]) == false) {
             gameState.numberOfFalse++;
         }
     }
@@ -22,11 +23,11 @@ export function compareGuessAndSolution(currentGuess: string[], solution: string
 
     // checking for colors in the wrong position
 
+    let hasMatched = false
     for (let i = 0; i !== 4; i++) {
-        if (gameState.positionOfCompletelyCorrect[i] !== undefined) {
-            let hasMatched = false
+        if (!gameState.positionOfCompletelyCorrect[i]) {
             for (let a = 0; a !== 4; a++) {
-                if (currentGuess[i] == solution[a] && solution[a] !== gameState.positionOfCompletelyCorrect[i] && hasMatched == false) {
+                if (currentGuess[i] == solution[a] && !gameState.positionOfCompletelyCorrect[i] && !hasMatched) {
                     gameState.numberOfInCombination++
                     hasMatched = true
                 }
@@ -34,6 +35,7 @@ export function compareGuessAndSolution(currentGuess: string[], solution: string
             hasMatched = false
         }
     }
+
     return [gameState.numberOfCorrect,
     gameState.numberOfFalse,
     gameState.numberOfInCombination]
