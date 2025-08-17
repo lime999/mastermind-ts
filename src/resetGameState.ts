@@ -4,7 +4,6 @@ numberOfCorrect: number,
     numberOfInCombination: number,
     positionOfCompletelyCorrect: Array<boolean>,
     numberOfTries: number,
-    solvedOrLost: boolean
 }
 
 
@@ -15,6 +14,5 @@ export function resetGameState(): gamestate {
     numberOfInCombination: 0,
     positionOfCompletelyCorrect: [] as Array<boolean>,
     numberOfTries: 0,
-    solvedOrLost: false
   }
 }

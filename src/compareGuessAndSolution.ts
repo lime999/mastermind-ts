@@ -19,7 +19,6 @@ export function compareGuessAndSolution(currentGuess: string[], solution: string
             gameState.numberOfFalse++;
         }
     }
-    console.log(gameState.positionOfCompletelyCorrect)
 
     // checking for colors in the wrong position
 

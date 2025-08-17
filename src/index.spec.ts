@@ -14,10 +14,18 @@ describe("solution ", () => {
         expect(createSolution().every(maybeColor => pinColors.includes(maybeColor))).toEqual(true);
     })
 })
-describe("feedback function gives correct feedback with ", () => {
+
+
+describe("comparing function gives correct feedback with ", () => {
 
     // first array is the guess, second one the solution
     // first number in the last array is the number of correct, 2nd number of false and 3rd number of in combination
+
+    test("any combination(rough)", () => {
+        let placeholder = compareGuessAndSolution(["white", "yellow", "yellow", "yellow"], createSolution())
+        expect(placeholder[0] + placeholder[1] + placeholder[2]).toEqual(4)
+    })
+
 
     test("duplicate colors in the solution and only 1 in guess", () => {
         expect(compareGuessAndSolution(["white", "yellow", "yellow", "yellow"], ["white", "white", "green", "blue"])).toEqual([1, 3, 0])

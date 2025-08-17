@@ -6,7 +6,6 @@ export function createSolution(): Array<string> {
     let randomNumber: number = Math.floor(Math.random() * 8)
     solution.push(pinColors[randomNumber])
   }
-  console.log(solution)
   return solution
 }
 
