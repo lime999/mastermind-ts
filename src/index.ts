@@ -10,6 +10,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+type anyPin = "blue" | "white" | "red" | "black" | "orange" | "green" | "yellow" | "grey"
 let solution = createSolution()
 console.log(solution)
 let gameState = resetGameState()
@@ -19,8 +20,6 @@ for (let i = 0; i < pinColors.length; i++) {
   console.log("%c" + pinColors[i] + ",", "color: " + pinColors[i]);
 }
 
-
-
 // prompt user for guess
 rl.setPrompt('Guess the solution, e.g. "red,white,red,orange"\n(duplicate colors are allowed):\n')
 rl.prompt()
@@ -28,11 +27,14 @@ rl.on('line', (answer) => {
   let currentGuess: Array<string> = answer.split(",")
 
   // stop if invalid answer
-
-  if (currentGuess.every(color => pinColors.includes(color)) !== true) {
-    console.log(`Invalid Answer!\n${(11 - gameState.numberOfTries)} Tries remaining,\nTry again:`)
+  // doesn't work right now, because it still executes everything afterwards
+  if (currentGuess.every(color => pinColors.includes(color)) !== true && currentGuess[4]) {
+    console.log(`Invalid Answer!`)
+    console.log(`${(11 - gameState.numberOfTries)} Tries remaining,\nTry again:`)
     return
+
   }
+
   console.log(currentGuess)
 
   // compare guess and solution
