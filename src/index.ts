@@ -1,101 +1,58 @@
 import * as readline from 'readline'
+import { createSolution } from './create-solution';
+import { pinColors } from './pin';
+import { resetGameState } from './resetGameState';
+import { giveFeedback } from './giveFeedback';
+import { compareGuessAndSolution } from './compareGuessAndSolution';
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-let currentGuess: Array<string>
-let numberOfCorrect: number = 0
-let numberOfFalse: number = 0
-let numberOfInCombination: number = 0
-let solvedOrLost: boolean = false
-let numberOfTries: number = 0
-let loopRunning = false;
-let colors: Array<string> = ["blue", "white", "red", "black", "orange", "green", "yellow", "grey"]
-console.log("The allowed colors are: " + colors)
-if (numberOfTries > 11) {
-  solvedOrLost = true
-}
 
-
-// create solution
-
-let solution: Array<string> = []
-let completelyCorrect: Array<string> = []
-for (let i = 0; i < 4; i++) {
-  let randomNumber: number = Math.floor(Math.random() * 8)
-  solution.push(colors[randomNumber])
-}
+type anyPin = "blue" | "white" | "red" | "black" | "orange" | "green" | "yellow" | "grey"
+let solution = createSolution()
 console.log(solution)
+let gameState = resetGameState()
 
-
-// while not solved:
-loopRunning = true
-if (loopRunning == true && solvedOrLost ==  false) {
-  loop()
-  loopRunning = false
+console.log("The allowed colors are:")
+for (let i = 0; i < pinColors.length; i++) {
+  console.log("%c" + pinColors[i] + ",", "color: " + pinColors[i]);
 }
-function loop() {
-  loopRunning = false;
 
-  // get input(guess) from user
+// prompt user for guess
+rl.setPrompt('Guess the solution, e.g. "red,white,red,orange"\n(duplicate colors are allowed):\n')
+rl.prompt()
+rl.on('line', (answer) => {
+  let currentGuess: Array<string> = answer.split(",")
 
-  rl.question('Guess the solution, e.g. "red,white,red,orange":\n', (answer) => {
-    currentGuess = answer.split(",")
+  // stop if invalid answer
+  // doesn't work right now, because it still executes everything afterwards
+  if (currentGuess.every(color => pinColors.includes(color)) !== true && currentGuess[4]) {
+    console.log(`Invalid Answer!`)
+    console.log(`${(11 - gameState.numberOfTries)} Tries remaining,\nTry again:`)
+    return
 
-    // stop if invalid answer
+  }
 
-    if (currentGuess.every(color => colors.includes(color)) !== true) {
-      console.log("Invalid Answer!")
-      rl.close()
-      return
-    }
-    console.log(currentGuess)
+  console.log(currentGuess)
 
-    // compare guess and solution
+  // compare guess and solution
+  const result = compareGuessAndSolution(currentGuess, solution, gameState)
+  gameState.numberOfCorrect = result[0]
+  gameState.numberOfFalse = result[1]
+  gameState.numberOfInCombination = result[2]
 
-    for (let i = 0; i !== 4; i++) {
+  // give feedback
 
-      // checking for completely correct colors
+  giveFeedback(gameState)
 
-      if (currentGuess[i] == solution[i]) {
-        numberOfCorrect += 1
-        completelyCorrect.push(currentGuess[i])
-      }
-
-      // checking for false colors
-
-      else if (solution.includes(currentGuess[i]) !== true) {
-        numberOfFalse += 1
-      }
-    }
-
-    // checking for colors in the wrong position
-
-    for (let i = 0; i !== 4; i++) {
-      let hasMatched = false
-      for (let a = 0; a !== 4; a++) {
-        if (currentGuess[i] == solution[a] && completelyCorrect[i] !== solution[a] && hasMatched == false) {
-          numberOfInCombination += 1
-          hasMatched = true
-        }
-      }
-      hasMatched = false
-    }
-    // give feedback
-    // if solved stop 
-    if (numberOfCorrect < 4) {
-      console.log("Your Guess had " + (numberOfCorrect < 1 ? "no" : numberOfCorrect) + " completely correct color(s), " + (numberOfFalse < 1 ? "no" : numberOfFalse) + " false color(s), and " + (numberOfInCombination < 1 ? "no" : numberOfInCombination) + " color(s) that were correct but in the wrong place")
-      numberOfTries + 1
-      loopRunning = true
-    } else if (numberOfCorrect == 4) {
-      console.log("Congratulations,\nyou have won the game!")
-      solvedOrLost = true
-      rl.close()
-    }
-  })
+})
 
 
-}
+
+
+
 
 
 
