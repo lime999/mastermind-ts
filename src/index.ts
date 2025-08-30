@@ -38,10 +38,10 @@ rl.on('line', (answer) => {
   console.log(currentGuess)
 
   // compare guess and solution
-
-  gameState.numberOfCorrect = compareGuessAndSolution(currentGuess, solution)[0]
-  gameState.numberOfFalse = compareGuessAndSolution(currentGuess, solution)[1]
-  gameState.numberOfInCombination = compareGuessAndSolution(currentGuess, solution)[2]
+  const result = compareGuessAndSolution(currentGuess, solution, gameState)
+  gameState.numberOfCorrect = result[0]
+  gameState.numberOfFalse = result[1]
+  gameState.numberOfInCombination = result[2]
 
   // give feedback
 
